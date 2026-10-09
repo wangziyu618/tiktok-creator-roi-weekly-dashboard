@@ -6,6 +6,8 @@
 
   var D = window.DASHBOARD_DATA || { weeks: [], rows: [], note: '' };
   var ACTIONS = D.actions || [];
+  var LABELS = D.labels || {};
+  function wlabel(w) { return LABELS[w] || w; }
 
   var COLOR = {
     S: '#12B886', A: '#228BE6', B: '#7950F2', C: '#E64980', D: '#C9CFCD',
@@ -138,20 +140,20 @@
 
   /* ---------- KPI ---------- */
   function kpiDelta(cur, prev, isRatio) {
-    if (prev == null) return '<span>— 无上周数据</span>';
+    if (prev == null) return '<span>— 无上期数据</span>';
     if (isRatio) {
       var d = cur - prev;
       if (Math.abs(d) < 1e-9) return '<span>持平</span>';
       var cls = d > 0 ? 'up' : 'down';
       return '<span class="' + cls + '">' + (d > 0 ? '▲' : '▼') + ' ' +
-        Math.abs(d).toFixed(2) + '</span> vs 上周';
+        Math.abs(d).toFixed(2) + '</span> vs 上期';
     }
-    if (prev === 0) return '<span>— 上周为 0</span>';
+    if (prev === 0) return '<span>— 上期为 0</span>';
     var p = (cur - prev) / prev;
     if (Math.abs(p) < 1e-9) return '<span>持平</span>';
     var cls2 = p > 0 ? 'up' : 'down';
     return '<span class="' + cls2 + '">' + (p > 0 ? '▲' : '▼') + ' ' +
-      fmtPct(Math.abs(p)) + '</span> vs 上周';
+      fmtPct(Math.abs(p)) + '</span> vs 上期';
   }
 
   function renderKPI(cur, prev) {
@@ -189,7 +191,7 @@
         delta: roi == null ? '<span>—</span>' : kpiDelta(roi, pRoi, true) },
       { label: '出单达人', value: billed + ' 人', delta: kpiDelta(billed, pBilled) },
       { label: '新增出单达人', value: newBilled + ' 人',
-        delta: '<span>本周首次出单</span>' },
+        delta: '<span>本期首次出单</span>' },
       { label: '结算佣金 / 佣金率', value: fmtMoney(comm),
         delta: '<span>佣金率 ' + (gmv > 0 ? fmtPct(comm / gmv) : '—') + '</span>' },
       { label: '内容产出', value: content.toLocaleString(),
@@ -197,7 +199,7 @@
       { label: '订单 / AOV', value: orders.toLocaleString() + ' 单',
         delta: '<span>AOV ' + fmtMoney(aov) + '</span>' },
       { label: '退款率', value: fmtPct(refundRate),
-        delta: pRefundRate == null ? '<span>— 无上周数据</span>'
+        delta: pRefundRate == null ? '<span>— 无上期数据</span>'
           : kpiDelta(refundRate, pRefundRate, true) }
     ];
 
@@ -224,7 +226,7 @@
       legend: { bottom: 0, icon: 'circle', itemWidth: 9, itemHeight: 9,
         textStyle: { color: COLOR.muted, fontSize: 12 }, data: ['GMV', 'ROI'] },
       grid: { left: 56, right: 48, top: 24, bottom: 52 },
-      xAxis: Object.assign(axisStyle(), { type: 'category', data: weeks,
+      xAxis: Object.assign(axisStyle(), { type: 'category', data: weeks.map(wlabel),
         splitLine: { show: false } }),
       yAxis: [
         Object.assign(axisStyle(), { type: 'value', name: 'GMV($)',
@@ -482,7 +484,7 @@
       animation: false,
       tooltip: baseTooltip({ trigger: 'axis' }),
       grid: { left: 48, right: 24, top: 24, bottom: 32 },
-      xAxis: Object.assign(axisStyle(), { type: 'category', data: weeks,
+      xAxis: Object.assign(axisStyle(), { type: 'category', data: weeks.map(wlabel),
         splitLine: { show: false } }),
       yAxis: Object.assign(axisStyle(), { type: 'value', minInterval: 1,
         name: '出单达人数', nameTextStyle: { color: COLOR.muted, fontSize: 11 } }),
@@ -576,7 +578,7 @@
     var sel = $('f-week');
     sel.innerHTML = D.weeks.slice().sort().reverse().map(function (w) {
       return '<option value="' + w + '"' + (w === state.week ? ' selected' : '') + '>' +
-        w + '</option>';
+        wlabel(w) + '（' + w + ' 起）</option>';
     }).join('');
     sel.addEventListener('change', function () { state.week = sel.value; refresh(); });
 

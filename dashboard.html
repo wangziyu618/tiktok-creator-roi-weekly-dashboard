@@ -149,10 +149,10 @@
         <div class="sub" id="data-note">数据加载中…</div>
       </div>
       <div class="filters">
-        <label for="f-week">数据周</label>
+        <label for="f-week">数据周期</label>
         <select id="f-week"></select>
         <div class="seg" id="f-range">
-          <button data-v="week" class="on">单周</button>
+          <button data-v="week" class="on">单期</button>
           <button data-v="cum">全周期累计</button>
         </div>
         <label for="f-tier">层级</label>
@@ -174,17 +174,17 @@
       <div class="module-head">
         <div class="kicker">模块一</div>
         <h2>核心指标概览</h2>
-        <p>先结果、再过程、环比说话：每张卡展示当前范围数值与环比（无上周数据时显示 —）。</p>
+        <p>先结果、再过程、环比说话：每张卡展示当前范围数值与上一周期对比（无上期数据时显示 —）。</p>
       </div>
       <div class="kpi-grid" id="kpi-grid"></div>
       <div class="grid">
         <div class="card s8">
-          <div class="card-title">GMV × ROI 周度趋势</div>
-          <div class="card-sub">柱：周 GMV；线：ROI（GMV ÷ 佣金），随筛选联动</div>
+          <div class="card-title">GMV × ROI 周期趋势</div>
+          <div class="card-sub">柱：周期 GMV；线：ROI（GMV ÷ 佣金），随筛选联动</div>
           <div id="c-trend" class="chart" style="height: 300px;"></div>
         </div>
         <div class="card s4">
-          <div class="card-title">本周转化漏斗</div>
+          <div class="card-title">本期转化漏斗</div>
           <div class="card-sub">建联 → 发样 → 投稿 → 出单（达人数）</div>
           <div id="c-funnel-mini" class="chart" style="height: 300px;"></div>
         </div>
@@ -254,17 +254,17 @@
       <div class="module-head">
         <div class="kicker">模块四</div>
         <h2>优化策略与效果追踪</h2>
-        <p>动作记录与指标联动：每周在 data/actions_log.csv 记录运营动作，看板自动标注到趋势并计算响应。</p>
+        <p>动作记录与指标联动：在 data/actions_log.csv 记录运营动作，看板自动标注到趋势并计算响应。</p>
       </div>
       <div class="grid">
         <div class="card s8">
-          <div class="card-title">出单达人数周趋势 × 动作标注</div>
+          <div class="card-title">出单达人数周期趋势 × 动作标注</div>
           <div class="card-sub">动作日的垂直参考线，悬停显示动作内容</div>
           <div id="c-action-trend" class="chart" style="height: 280px;"></div>
         </div>
         <div class="card s4">
-          <div class="card-title">本周动作记分卡</div>
-          <div class="card-sub">动作量 / 触达达人 / 14 日响应率</div>
+          <div class="card-title">动作记分卡</div>
+          <div class="card-sub">动作量 / 触达达人 / 响应率</div>
           <div id="action-scorecard"></div>
         </div>
         <div class="card s12">

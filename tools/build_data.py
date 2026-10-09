@@ -14,6 +14,9 @@
 
 actions_log.csv 字段：
     date, creator, type, note
+
+periods.csv（可选，周期显示名）：
+    week_start, label
 """
 import csv
 import json
@@ -77,9 +80,18 @@ def main():
                         'note': (r.get('note') or '').strip()
                     })
 
+    labels = {}
+    periods_path = os.path.join(DATA_DIR, 'periods.csv')
+    if os.path.exists(periods_path):
+        with open(periods_path, encoding='utf-8-sig') as fp:
+            for r in csv.DictReader(fp):
+                if r.get('week_start') and r.get('label'):
+                    labels[r['week_start'].strip()] = r['label'].strip()
+
     payload = {
         'weeks': weeks,
-        'note': '数据周 %s ～ %s，由 tools/build_data.py 生成' % (weeks[0], weeks[-1]),
+        'labels': labels,
+        'note': '%d 个数据周期（%s ～ %s），由 tools/build_data.py 生成' % (len(weeks), weeks[0], weeks[-1]),
         'rows': rows,
         'actions': actions
     }
