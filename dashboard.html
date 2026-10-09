@@ -34,7 +34,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* 顶部栏 */
     header.topbar {
       position: sticky; top: 0; z-index: 50;
       background: rgba(245,245,247,0.86);
@@ -55,15 +54,6 @@
       padding: 6px 10px; border-radius: 8px;
       border: 1px solid var(--rule); background: var(--card); color: var(--ink);
     }
-    .seg {
-      display: inline-flex; background: #E8E8EB; border-radius: 9px; padding: 2px;
-    }
-    .seg button {
-      font-family: var(--font); font-size: 12.5px;
-      border: 0; background: transparent; color: var(--ink);
-      padding: 5px 14px; border-radius: 7px; cursor: pointer;
-    }
-    .seg button.on { background: var(--card); box-shadow: 0 1px 3px rgba(0,0,0,0.12); font-weight: 600; }
 
     main { max-width: 1440px; margin: 0 auto; padding: 24px; }
     section.module { margin-bottom: 32px; }
@@ -87,7 +77,6 @@
     .s6 { grid-column: span 6; } .s8 { grid-column: span 8; }
     .s12 { grid-column: span 12; }
 
-    /* KPI */
     .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 14px; }
     .kpi {
       background: var(--card); border-radius: var(--radius);
@@ -109,7 +98,6 @@
       min-height: 160px; color: var(--muted); font-size: 13px; padding: 16px;
     }
 
-    /* 表格 */
     table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
     th, td {
       padding: 7px 10px; text-align: left; border-bottom: 1px solid var(--rule);
@@ -149,12 +137,6 @@
         <div class="sub" id="data-note">数据加载中…</div>
       </div>
       <div class="filters">
-        <label for="f-week">数据周期</label>
-        <select id="f-week"></select>
-        <div class="seg" id="f-range">
-          <button data-v="week" class="on">单期</button>
-          <button data-v="cum">全周期累计</button>
-        </div>
         <label for="f-tier">层级</label>
         <select id="f-tier">
           <option value="">全部</option>
@@ -174,18 +156,18 @@
       <div class="module-head">
         <div class="kicker">模块一</div>
         <h2>核心指标概览</h2>
-        <p>先结果、再过程、环比说话：每张卡展示当前范围数值与上一周期对比（无上期数据时显示 —）。</p>
+        <p>全周期累计口径：先结果（GMV / ROI），再过程（建联 → 出单漏斗、内容产出），用于一眼判断业务健康度。</p>
       </div>
       <div class="kpi-grid" id="kpi-grid"></div>
       <div class="grid">
         <div class="card s8">
-          <div class="card-title">GMV × ROI 周期趋势</div>
-          <div class="card-sub">柱：周期 GMV；线：ROI（GMV ÷ 佣金），随筛选联动</div>
-          <div id="c-trend" class="chart" style="height: 300px;"></div>
+          <div class="card-title">GMV 帕累托（头部依赖诊断）</div>
+          <div class="card-sub">柱：达人 GMV 降序；线：累计占比。前 2 位贡献超 60% 即触发头部依赖预警</div>
+          <div id="c-pareto" class="chart" style="height: 300px;"></div>
         </div>
         <div class="card s4">
-          <div class="card-title">本期转化漏斗</div>
-          <div class="card-sub">建联 → 发样 → 投稿 → 出单（达人数）</div>
+          <div class="card-title">建联 → 出单转化漏斗</div>
+          <div class="card-sub">建联 / 发样 / 投稿 / 出单（达人数），诊断业务最大断点</div>
           <div id="c-funnel-mini" class="chart" style="height: 300px;"></div>
         </div>
       </div>
@@ -212,7 +194,7 @@
         </div>
         <div class="card s12">
           <div class="card-title">达人明细（按 GMV 排序，前 30）</div>
-          <div class="card-sub">建议动作由层级自动生成，可导出为本周执行清单</div>
+          <div class="card-sub">建议动作由层级自动生成，可作为下一步执行清单</div>
           <div class="table-wrap"><table id="creator-table"></table></div>
         </div>
       </div>
@@ -254,22 +236,22 @@
       <div class="module-head">
         <div class="kicker">模块四</div>
         <h2>优化策略与效果追踪</h2>
-        <p>动作记录与指标联动：在 data/actions_log.csv 记录运营动作，看板自动标注到趋势并计算响应。</p>
+        <p>按层级一键生成动作建议；如维护 data/actions_log.csv，看板会汇总动作量、触达人数与响应率，便于复盘。</p>
       </div>
       <div class="grid">
-        <div class="card s8">
-          <div class="card-title">出单达人数周期趋势 × 动作标注</div>
-          <div class="card-sub">动作日的垂直参考线，悬停显示动作内容</div>
-          <div id="c-action-trend" class="chart" style="height: 280px;"></div>
-        </div>
         <div class="card s4">
           <div class="card-title">动作记分卡</div>
           <div class="card-sub">动作量 / 触达达人 / 响应率</div>
           <div id="action-scorecard"></div>
         </div>
+        <div class="card s8">
+          <div class="card-title">分层建议动作</div>
+          <div class="card-sub">基于当前层级人数自动汇总，可直接复制进周报</div>
+          <div id="action-advice"></div>
+        </div>
         <div class="card s12">
-          <div class="card-title">动作清单与下周计划</div>
-          <div class="card-sub">读取 actions_log，周报直接引用</div>
+          <div class="card-title">动作清单</div>
+          <div class="card-sub">读取 actions_log，按日期倒序展示</div>
           <div class="table-wrap"><table id="action-table"></table></div>
         </div>
       </div>
@@ -277,7 +259,7 @@
   </main>
 
   <footer class="page">
-    <p>数据来源：TikTok Shop Affiliate 导出（ss.xlsx 快照）。口径：ROI = Creator-attributed GMV ÷ Est. commission；纯佣模式无坑位费。</p>
+    <p>数据来源：TikTok Shop Affiliate 导出。口径：ROI = Creator-attributed GMV ÷ Est. commission；纯佣模式无坑位费。数据为全周期累计，多份导出已按达人合并。</p>
   </footer>
 
   <script src="./_shared/js/echarts.min.js"></script>
