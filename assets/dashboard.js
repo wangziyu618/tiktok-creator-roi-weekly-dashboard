@@ -463,47 +463,18 @@
       '<div class="empty">暂无达人数据</div>';
   }
 
-  function scorecardHtml(actions, touchedCount, respondedRate) {
-    var cell = function (label, value, sub) {
-      return '<div style="padding:10px 2px 12px;border-bottom:1px solid ' + COLOR.grid + ';">' +
-        '<div style="font-size:12px;color:' + COLOR.muted + ';">' + label + '</div>' +
-        '<div style="font-size:24px;font-weight:700;letter-spacing:-0.02em;' +
-        'font-variant-numeric:tabular-nums;margin-top:2px;">' + value + '</div>' +
-        (sub ? '<div style="font-size:11.5px;color:' + COLOR.muted + ';margin-top:1px;">' + sub + '</div>' : '') +
-        '</div>';
-    };
-    return cell('动作次数', actions, null) +
-      cell('触达达人', touchedCount, null) +
-      cell('触达后已出单', respondedRate, null);
-  }
-
   function renderActions() {
-    var scoreEl = $('action-scorecard');
     var tableEl = $('action-table');
+    var head = '<thead><tr><th>日期</th><th>达人</th><th>动作类型</th><th>备注</th></tr></thead>';
     if (!ACTIONS.length) {
-      scoreEl.innerHTML = scorecardHtml('0', '0 人', '—') +
-        '<div style="margin-top:12px;padding:10px 12px;background:#F5F5F7;border-radius:8px;' +
-        'font-size:12px;color:' + COLOR.muted + ';line-height:1.7;">' +
-        '还没有动作记录。在 <b>data/actions_log.csv</b> 中按模板记录动作后，' +
-        '运行 <b>python tools/build_data.py</b> 即可自动汇总到这里。' +
-        '</div>';
-      tableEl.innerHTML = '<thead><tr><th>日期</th><th>达人</th><th>动作类型</th><th>备注</th></tr></thead><tbody>' +
+      tableEl.innerHTML = head + '<tbody>' +
         '<tr><td style="color:#C7C7CC;">2026-10-12</td><td style="color:#C7C7CC;">creator_demo</td>' +
         '<td style="color:#C7C7CC;">催稿</td><td style="color:#C7C7CC;white-space:normal;">示例行 — 按 data/templates/actions_template.csv 填写后自动替换</td></tr>' +
         '<tr><td colspan="4" style="text-align:center;color:' + COLOR.muted + ';padding:14px;">' +
-        '暂无动作记录 · 周报中「本周动作 / 下周计划」将取自这里</td></tr></tbody>';
+        '暂无动作记录 · 在 data/actions_log.csv 记录后重新生成 data.js 即可</td></tr></tbody>';
       return;
     }
-    var touched = {};
-    ACTIONS.forEach(function (a) { touched[a.creator] = true; });
-    var touchedNames = Object.keys(touched);
-    var billedSet = {};
-    ROWS.forEach(function (c) { if (c.gmv > 0) billedSet[c.name] = true; });
-    var responded = touchedNames.filter(function (n) { return billedSet[n]; }).length;
-    var rate = touchedNames.length ? fmtPct(responded / touchedNames.length) : '—';
-    scoreEl.innerHTML = scorecardHtml(
-      String(ACTIONS.length), touchedNames.length + ' 人', rate);
-    tableEl.innerHTML = '<thead><tr><th>日期</th><th>达人</th><th>动作类型</th><th>备注</th></tr></thead><tbody>' +
+    tableEl.innerHTML = head + '<tbody>' +
       ACTIONS.slice().sort(function (a, b) { return a.date < b.date ? 1 : -1; }).map(function (a) {
         return '<tr><td>' + a.date + '</td><td>' + a.creator + '</td><td>' + a.type +
           '</td><td style="white-space:normal;">' + (a.note || '') + '</td></tr>';
