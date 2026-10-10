@@ -4,9 +4,14 @@
 
 > 本版本为**全周期累计视图**，多份周期导出已按达人自动合并，无需手动切换周期。
 
+## 在线看板
+
+- **在线访问（GitHub Pages）**：https://wangziyu618.github.io/tiktok-creator-roi-weekly-dashboard/dashboard.html
+- **看板源文件**：[dashboard.html](./dashboard.html)
+
 ## 快速开始
 
-直接用浏览器打开 `dashboard.html` 即可（无需本地服务器，数据通过 `<script>` 引入）。
+点击上面的在线链接即可查看；本地使用则直接用浏览器打开 `dashboard.html`（无需本地服务器，数据通过 `<script>` 引入）。
 
 仓库已内置 6 个真实数据周期（2026-09-08 ～ 2026-09-13，共 3,683 行达人记录），经 `build_data.py` 合并为 **1,646 位达人全周期累计数据**，开箱即可查看完整漏斗、分层与 ROI 拆解。
 
